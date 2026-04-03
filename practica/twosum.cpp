@@ -30,44 +30,40 @@ class Solution{
             return 1;
         }
 
-        int romanToInt(string s) {
-            int sum=0;
-            for (int i=0;i<s.length();i++){
-                if (s[i]=='M'){
-                    sum+=1000;
+        int lengthOfLastWord(string s) {
+            int cont=0;
+            for (int i= s.length()-1; i>=0;i--){
+                if (s[i]!=' '){
+                    cont++;
                 }
-                else if (s[i]=='D'){
-                    sum+=500;
+                else if (cont>0 && s[i]==' '){
+                    break;
                 }
-                else if (s[i]=='C'){
-                    sum+=100;
-                }
-                else if (s[i]=='L'){
-                    sum+=50;
-                }
-                else if (s[i]=='X'){
-                    sum+=10;
-                }
-                else if (s[i]=='V'){
-                    sum+=5;
-                }
-                else if(s[i]=='I'){
-                    sum++;
-                }
-                else{
-                    return 0;
-                }
-
             }
+            return cont;
+        }
 
+        vector<int> plusOne(vector<int>& digits) {
+            for (int i = digits.size()-1; i>=0; i--){
+                if (digits[i]+1 < 10){
+                    digits[i]++;
+                    return digits;
+                }
+                digits[i]=0;
+            }
+            digits.insert(digits.begin(),1);
+            return digits;
         }
 };
 
 
 int main(){
-    string h="MCMXCIV";
     Solution res;
-    int num=res.romanToInt(h);
-    cout<<num<<endl;
+    vector<int> digits={9,9};
+    vector<int> sal=res.plusOne(digits);
+
+    for (int i=0; i<sal.size();i++){
+        cout<<sal[i]<<endl;
+    }
     return 0;
 }
