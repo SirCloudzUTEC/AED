@@ -54,16 +54,55 @@ class Solution{
             digits.insert(digits.begin(),1);
             return digits;
         }
+
+        string longestCommonPrefix(vector<string>& strs) {
+            if (strs.empty()) return "";
+
+            string prefix=strs[0];
+            
+            for (int i=1; i<strs.size();i++){
+                while(strs[i].find(prefix) != 0){
+                    prefix.pop_back();
+                    if (prefix.empty()) return "";
+                }
+                
+            }
+            return prefix;
+        }
+
+        bool isValid(string s) {
+            string temp = "";
+
+            for (char c : s) {
+                if (c == '(' || c == '[' || c == '{') {
+                    temp += c;
+                } 
+                else 
+                {
+                    if (temp.empty()) return false;
+
+                    char last = temp.back();
+                    temp.pop_back();
+
+                    if ((c == ')' && last != '(') ||
+                        (c == ']' && last != '[') ||
+                        (c == '}' && last != '{')) {
+                        return false;
+                    }
+        }
+    }
+
+    return temp.empty();
+}
+
 };
 
 
 int main(){
     Solution res;
-    vector<int> digits={9,9};
-    vector<int> sal=res.plusOne(digits);
+    string sub="([)])";
+    bool sal=res.isValid(sub);
 
-    for (int i=0; i<sal.size();i++){
-        cout<<sal[i]<<endl;
-    }
+    cout<<sal<<endl;
     return 0;
 }
