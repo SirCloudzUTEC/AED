@@ -102,10 +102,10 @@ class Solution{
                  }
             }
         return temp.empty();
-}
+    }
 
         ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-            if (list1 != nullptr && list2 != nullptr) {
+           if (list1 != nullptr && list2 != nullptr){
                 if (list1->val < list2->val){
                     list1->next = mergeTwoLists(list1->next, list2);
                     return list1;
@@ -114,11 +114,30 @@ class Solution{
                     list2->next = mergeTwoLists(list1, list2->next);
                     return list2;
                 }
-        }
-            if (list1==nullptr) return list2;
-            return list1;
+           }
+           if (list1 == nullptr) return list2;
+           return list1;
+    }
 
-}
+        int strStr(string haystack, string needle) {
+            if (needle.empty()) return 0;
+            
+            int lenNeedle=needle.length(), j=0;
+            for (int i=0; i<haystack.length(); i++){
+                if (haystack[i]==needle[j]){
+                    j++;
+                    if (lenNeedle == j){
+                    return i-j + 1;
+                }
+                }
+                else{
+                    i=i-j;
+                    j=0;
+                }
+            }
+            return -1;
+    }
+
 
 };
 
