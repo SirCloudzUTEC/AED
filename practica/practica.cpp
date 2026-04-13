@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -138,14 +139,47 @@ class Solution{
             return -1;
     }
 
+        int searchInsert(vector<int>& nums, int target) {
+            for (int i=0; i<nums.size(); i++){
+                if (nums[i] >= target){
+                    return i;
+                }
+            }
+
+            return nums.size();
+        }
+
+
+        string addStrings(string num1, string num2) {
+            int i = num1.length() - 1, j = num2.length() - 1, carry = 0;
+            string res="";
+
+            while (i>=0  || j>=0 || carry){
+                int sum=carry;
+
+                if (i >= 0){
+                    sum+=num1[i] - '0';
+                    i--;
+                }
+                if (j >= 0){
+                    sum+=num2[j] - '0';
+                    j--;
+                }
+
+                res += (sum % 10) + '0';
+                carry = sum / 10;
+            }
+            reverse(res.begin(), res.end());
+            return res;
+        }
 
 };
 
 
 int main(){
     Solution res;
-    string sub="([)])";
-    bool sal=res.isValid(sub);
+    string num1="123", num2="234";
+    string sal=res.addStrings(num1, num2);
 
     cout<<sal<<endl;
     return 0;
