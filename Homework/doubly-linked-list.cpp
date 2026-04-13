@@ -129,32 +129,49 @@ public:
     }
 
     void insert(T val, int pos){
-        if (empty() || pos<0 || pos > n) throw std::runtime_error("Lista vacia");
-
-        if (pos == 0) push_front(val) return;
-        if (pos==n) push_back(val) return;
-
-        Node<T>* curr=head;
-
-        for (int i=0;i<pos;i++){
-            curr=curr->next;
-        }
-
-        Node<T>* node = new Node<T>* (val);
-
-        node->prev = curr->prev;
-        node->next = curr;
-
-        curr->prev->nex = node;
-        curr->prev=node;
-
-        n++;
+        
     }
 
-    void print(){
-        while (){
+    void remove(int pos){
 
+    }
+
+    int size(){
+        Node<T>* curr=head;
+        int cont=0;
+        while (curr!=nullptr){
+            cont++;
+            curr = curr->next;
         }
+
+        delete curr;
+        return cont;
+    }
+
+
+    void print(){
+        Node<T>* curr = head;
+        while(curr != nullptr){
+            cout<< curr->data <<" ";
+            curr = curr->next;
+        }
+
+        delete curr;
+        cout<<"\n";
+    }
+
+    void print_reverse(){
+        Node<T>* curr = tail;
+        while (curr!=nullptr){
+            cout<<curr->data<<" ";
+            curr = curr->prev;
+        }
+
+        delete curr;
+        cout<<"\n";
+    }
+
+    void reverse(){
     }
 };
 
@@ -168,14 +185,11 @@ int main(){
     l.push_back(5);
 
     l.push_front(2);
-    l.front();
-    cout<<l.front()<<std::endl;
-    l.pop_front();
-    cout<<l.front()<<std::endl;
-    l.pop_back();
-    cout<<l.back()<<std::endl;
-    l.insert(5,3);
+    l.reverse();
+    l.reverse();
     l.print();
-
+    l.print_reverse();
+    int size = l.size();
+    cout<<size<<std::endl;
     return 0;
 }
