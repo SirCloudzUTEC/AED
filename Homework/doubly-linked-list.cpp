@@ -129,10 +129,56 @@ public:
     }
 
     void insert(T val, int pos){
-        
+        Node<T>* temp = head;
+        int cont = 0;
+        while (temp != nullptr){
+            if (cont == pos){
+                Node<T>* next = temp->next;
+                Node<T>* prev = temp->prev;
+
+                if (next){
+                    
+                }
+            }
+
+            temp = temp->next;
+            cont++;
+        }
+
+
     }
 
     void remove(int pos){
+        Node<T>* temp = head;
+        int cont=0;
+        while (temp !=nullptr){
+            if (cont == pos){
+                Node<T>* next = temp->next;
+                Node<T>* prev = temp->prev;
+                
+                if (next!=nullptr){
+                    next->prev = prev;
+                }
+                else{
+                    tail = prev;
+                }
+
+                if (prev!=nullptr){
+                    prev->next = next;
+                }
+                else{
+                    head = next;
+                }
+
+                delete temp;
+                n--;
+                return;
+            }
+
+            cont++;
+            temp = temp->next;
+        }
+        
 
     }
 
@@ -172,6 +218,15 @@ public:
     }
 
     void reverse(){
+        Node<T>* curr=tail;
+        Node<T>* tempHead = head;
+        while (curr != nullptr){
+            tempHead = curr;
+
+            tempHead = tempHead ->next;
+            curr= curr->prev;
+        }
+
     }
 };
 
@@ -185,11 +240,13 @@ int main(){
     l.push_back(5);
 
     l.push_front(2);
-    l.reverse();
-    l.reverse();
+    //l.reverse();
+    //l.reverse();
+    l.remove(1);
+    l.remove(1);
     l.print();
-    l.print_reverse();
-    int size = l.size();
-    cout<<size<<std::endl;
+
+
+
     return 0;
 }
