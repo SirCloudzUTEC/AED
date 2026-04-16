@@ -137,7 +137,7 @@ public:
                 Node<T>* prev = temp->prev;
 
                 if (next){
-                    
+                        
                 }
             }
 
