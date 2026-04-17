@@ -55,21 +55,32 @@ public:
     }
 };
 
-string solve(const string& s) {
-    int len = s.length();
-    Stack<string>* res;
-    for (int i=0; i<len;i++){
-        if (s[i] == '*'){
-            i++;
+string solve1(const string& s) {
+    Stack<char> res;
+    for (int i=0; i<s.length();i++){
+        if (s[i]=='*'){
+            res.pop();
         }
         else{
-            res->push(&s[i]);
+            res.push(s[i]);
         }
-
     }
 
-    return &res;
+    string sal;
+    while (!res.isEmpty()){
+        sal = res.top()+sal;
+        res.pop();
+    }
+
+    return sal;
+
 }   
+
+string solve(const string& path) {
+    
+    return "";
+
+}
 
 void runTest(int testNumber, const string& input, const string& expected) {
     string result = solve(input);
@@ -84,10 +95,10 @@ void runTest(int testNumber, const string& input, const string& expected) {
 }
 
 int main() {
-    runTest(1, "abc*d", "abd");
-    runTest(2, "a*b*c*", "");
-    runTest(3, "leetcode", "leetcode");
-    runTest(4, "xy**z", "z");
-    runTest(5, "ab**cd*e", "ce");
+    runTest(1, "/home/", "/home");
+    runTest(2, "/../", "/");
+    runTest(3, "/home//foo/", "/home/foo");
+    runTest(4, "/a/./b/../../c/", "/c");
+    runTest(5, "/home//foo/../bar/./baz/", "/home/bar/baz");
     return 0;
 }
