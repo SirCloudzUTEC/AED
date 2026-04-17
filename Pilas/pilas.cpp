@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
 #include <stdexcept>
 using namespace std;
 
@@ -77,9 +79,30 @@ string solve1(const string& s) {
 }   
 
 string solve(const string& path) {
-    
-    return "";
+    vector<string> st;
+    string palabra;
 
+    for (int i = 0; i <= path.size(); i++) {
+        if (i < path.size() && path[i] != '/') {
+            palabra += path[i];
+        } else {
+            if (!palabra.empty()) {
+                if (palabra == "..") {
+                    if (!st.empty()) st.pop_back();
+                } else if (palabra != ".") {
+                    st.push_back(palabra);
+                }
+                palabra.clear();
+            }
+        }
+    }
+
+    string res;
+    for (const auto& dir : st) {
+        res += "/" + dir;
+    }
+
+    return res.empty() ? "/" : res;
 }
 
 void runTest(int testNumber, const string& input, const string& expected) {
