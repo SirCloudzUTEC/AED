@@ -57,6 +57,7 @@ public:
     }
 };
 
+// Problema 1
 string solve1(const string& s) {
     Stack<char> res;
     for (int i=0; i<s.length();i++){
@@ -78,7 +79,8 @@ string solve1(const string& s) {
 
 }   
 
-string solve(const string& path) {
+// Problema 2
+string solve2(const string& path) {
     vector<string> st;
     string palabra;
 
@@ -105,6 +107,48 @@ string solve(const string& path) {
     return res.empty() ? "/" : res;
 }
 
+// Problema 3
+bool solve(const vector<int>& pushed, const vector<int>& popped) {
+    Stack<int> temp;
+    int idx=0;
+    for (int pusheado:pushed){
+        temp.push(pusheado);
+        while(!temp.isEmpty() && temp.top() == popped[idx]){
+            temp.pop();
+            idx++;
+        }
+    }
+    return temp.isEmpty();
+}
+
+// Problema 4
+string solve(const string& s) {
+    Stack<char> temp;
+    string sal="",copia="";
+    int multiplo=0,j;
+
+    for (int i=0; i< s.length();i++){
+        if (s[i] == '['){
+            multiplo = s[i-1] - '0';
+        }
+        if (s[i] ==']'){
+            while(multiplo!=0){
+                sal = temp.top() + sal;
+                temp.pop();
+                multiplo--;
+            }
+            multiplo=0;
+        }
+        if (!isdigit(s[i])){
+            temp.push(s[i]);
+        }
+    }
+
+    return sal;
+}
+
+
+
 void runTest(int testNumber, const string& input, const string& expected) {
     string result = solve(input);
     if (result == expected) {
@@ -118,10 +162,10 @@ void runTest(int testNumber, const string& input, const string& expected) {
 }
 
 int main() {
-    runTest(1, "/home/", "/home");
-    runTest(2, "/../", "/");
-    runTest(3, "/home//foo/", "/home/foo");
-    runTest(4, "/a/./b/../../c/", "/c");
-    runTest(5, "/home//foo/../bar/./baz/", "/home/bar/baz");
+    runTest(1, "3[a]", "aaa");
+    runTest(2, "2[ab]3[c]", "ababccc");
+    runTest(3, "3[a2[c]]", "accaccacc");
+    runTest(4, "1[x]", "x");
+    runTest(5, "2[abc]3[cd]ef", "abcabccdcdcdef");
     return 0;
 }
