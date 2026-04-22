@@ -242,10 +242,22 @@ public:
 
     string minRemoveToMakeValid(string s) {
         Stack<string> conjunto;
-        string salida="";
+        string salida="", prueba;
+
+        // Input: s = "lee(t(c)o)de)"
+        // Output: "lee(t(c)o)de
 
         for (int i=0;i<s.length();i++){
+            if (s[i] == '('){
+                conjunto.push(prueba);
+                salida="";
+            }
+            else if(s[i] == ')'){
 
+            }
+            else{
+                prueba += s[i];
+            }
         }
 
         return salida;
