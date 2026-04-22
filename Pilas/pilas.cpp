@@ -155,6 +155,125 @@ string solve(const string& s) {
     return current;
 }
 
+class Solution {
+public:
+    bool isValid(string s) {
+        Stack<char> izq;
+        for (int i=0; i<s.length();i++){
+            if (s[i]=='[' || s[i]=='{' || s[i]=='('){
+                izq.push(s[i]);
+            }
+            else{
+                if (izq.isEmpty()) return 0;
+
+                char top = izq.top();
+                izq.pop();
+
+                if ((s[i]==')' && top != '(') || (s[i]=='}' && top != '{') || (s[i]==']' && top != '[')) return 0;
+            }
+        }
+        return 1;
+        
+    }
+
+    int evalRPN(vector<string>& tokens) {
+        Stack<int> nums;
+        int res;
+        for (int i=0; i<tokens.size();i++){
+            if (tokens[i] == "+" ){
+                int num1=nums.top(); nums.pop();
+                int num2=nums.top(); nums.pop();
+                nums.push(num2+num1);
+            }
+            else if(tokens[i] != "-"){
+                int num1=nums.top(); nums.pop();
+                int num2=nums.top(); nums.pop();
+                nums.push(num2-num1);
+            }
+            else if(tokens[i] != "*"){
+                int num1=nums.top(); nums.pop();
+                int num2=nums.top(); nums.pop();
+                nums.push(num2*num1);
+            }
+            else if (tokens[i] != "/"){
+                int num1=nums.top(); nums.pop();
+                int num2=nums.top(); nums.pop();
+                nums.push(num2/num1);
+            }
+            else{
+                nums.push(stoi(tokens[i]));
+            }
+        }
+        return res;
+    }
+
+    
+    string decodeString(string s) {
+        Stack<string> conjunto;
+        string salida="",num="";
+        for (int i=0;i<s.length();i++){
+            if (isdigit(s[i])){
+                num+=s[i];
+            }
+            else if(s[i] == '['){
+                conjunto.push(salida);
+                conjunto.push(num);
+                salida="";
+                num="";
+            }
+            else if (s[i] == ']'){
+                int multiplo = stoi(conjunto.top());
+                conjunto.pop();
+                string concatenar = conjunto.top(), temp="";
+                conjunto.pop();
+                
+                while (multiplo--){
+                    temp += salida;
+                }
+
+                salida = concatenar + temp;
+            }
+            else{
+                salida+=s[i];
+            }
+        }
+        return salida;
+    }
+
+    string minRemoveToMakeValid(string s) {
+        Stack<string> conjunto;
+        string salida="";
+
+        for (int i=0;i<s.length();i++){
+
+        }
+
+        return salida;
+    }
+};
+
+class MinStack {
+public:
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        
+    }
+    
+    void pop() {
+        
+    }
+    
+    int top() {
+        
+    }
+    
+    int getMin() {
+        
+    }
+};
 
 void runTest(int testNumber, const string& input, const string& expected) {
     string result = solve(input);
@@ -169,10 +288,9 @@ void runTest(int testNumber, const string& input, const string& expected) {
 }
 
 int main() {
-    runTest(1, "3[a]", "aaa");
-    runTest(2, "2[ab]3[c]", "ababccc");
-    runTest(3, "3[a2[c]]", "accaccacc");
-    runTest(4, "1[x]", "x");
-    runTest(5, "2[abc]3[cd]ef", "abcabccdcdcdef");
-    return 0;
+    Solution prueba;
+    string input="))((";
+    cout<<prueba.decodeString(input)<<endl;
+    input="))((";
+    cout<<prueba.decodeString(input)<<endl;
 }
