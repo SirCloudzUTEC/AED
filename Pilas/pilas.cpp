@@ -123,30 +123,37 @@ bool solve(const vector<int>& pushed, const vector<int>& popped) {
 
 // Problema 4
 string solve(const string& s) {
-    Stack<char> temp;
-    string sal="",copia="";
-    int multiplo=0,j;
+    Stack<int> nums;
+    Stack<string> strs;
+    string current = "";
+    int num = 0;
 
-    for (int i=0; i< s.length();i++){
-        if (s[i] == '['){
-            multiplo = s[i-1] - '0';
-        }
-        if (s[i] ==']'){
-            while(multiplo!=0){
-                sal = temp.top() + sal;
-                temp.pop();
-                multiplo--;
+    for (char c : s) {
+        if (isdigit(c)) {
+            num = num * 10 + (c - '0');
+        } 
+        else if (c == '[') {
+            nums.push(num);
+            strs.push(current);
+            num = 0;
+            current = "";
+        } 
+        else if (c == ']') {
+            int times = nums.top(); nums.pop();
+            string prev = strs.top(); strs.pop();
+            string temp = "";
+            for (int i = 0; i < times; i++) {
+                temp += current;
             }
-            multiplo=0;
-        }
-        if (!isdigit(s[i])){
-            temp.push(s[i]);
+            current = prev + temp;
+        } 
+        else {
+            current += c;
         }
     }
 
-    return sal;
+    return current;
 }
-
 
 
 void runTest(int testNumber, const string& input, const string& expected) {
