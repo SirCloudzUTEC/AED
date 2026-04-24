@@ -5,6 +5,9 @@
 #include <string>
 #include <utility>
 #include <cmath>
+#include <vector>
+#include <map>
+#include <cassert>
 
 using namespace std;
 
@@ -380,55 +383,140 @@ public:
     }
 };
 
-// ============================================================
-// DEMO
-// ============================================================
+class Solution{
+public:
+// Solucion a alto nivel: 
+    // 1. Crear una Hash Table
+    // 2. Recorrer arreglo y buscar nuevos elementos y sus complementos
+    // 3. Insertar el indice del elemento actual y buscamos si su complemento
+    // esta en la HashTable
+
+    // vector<int> twoSum(vector<int> nums, int target){
+    //     vector<int> salida;
+    //     UniversalHash<int> uh(1000003);
+    //     HashTable<int, int, DivisionHash<int>> hashtable(1,3);
+
+    //     for (int i=0;i<nums.size();i++){
+    //         if (hashtable.contains(nums[i])){
+    //             if (hashtable.contains(target % nums[i] )){
+    //                 salida.push_back(i);
+    //             }
+    //         }
+    //         else{
+    //             hashtable.insert(1,nums[i]);
+    //         }
+    //     }
+
+    //     return salida;
+    // }
+ 
+    vector<int> twoSum(vector<int> nums, int target){
+        HashTable<int, int, DivisionHash<int>> hashtable(5,3,0.5);
+
+        for (int i=0;i<nums.size();i++){
+            int need = target - nums[i];
+            int* idx = hashtable.search(need);
+            if (idx != nullptr)
+                return {*idx,i};
+            hashtable.insert(nums[i],i);
+        }
+        return {};
+    }
+
+    int cuadratic(int a){
+        int sum = 0;
+        while (a>0){
+            int digito = a%10;
+            sum += digito*digito;
+            a/=10;
+        }
+        return sum;
+    }
+
+    bool isHappy(int n) {
+        HashTable<int,bool> seen;
+        while (n!=1){
+            if (seen.contains(n)){
+                return false;
+            }
+            seen.insert(n, true);
+            n=cuadratic(n);
+        }
+        return true;
+    }
+
+    // La fija es devolver la longitud del sub array mas largo
+    int subarraySum(vector<int>& a, int k) {
+        int n = a.size();
+        unordered_map<int,int> mp;
+        int cnt = 0;
+        int s=0;
+        mp[0]++;
+        for (int i=0;i<n;++i){
+            s+=a[i];
+            int t = s- k;
+            if (mp[t]!=0){
+                cnt += mp[t];
+            }
+            mp[s]++;
+        }
+        return cnt; 
+    }
+
+    // Fija para parcial
+    // El array tiene 0 y 1. Hallar la longitud del subarray mas largo de 0 1.
+};
+
+class SolutionContainsDuplicate {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        HashTable<int, int, DivisionHash<int>> hashtable(5,3,0.5);
+
+        for (int i=0;i<nums.size();i++){
+            if(hashtable.search(nums[i])){
+                return true;
+            }
+            hashtable.insert(nums[i],nums[i]);
+        }
+        return false;
+    }
+};
+
+class SolutionValidAnagram {
+public:
+    // 1. Crear tabla hash
+    // 2. Recorrer S y agregarlo un key (indice) y value (cantidad de veces
+    // Que se repite esa letra)
+    // 3. Recorrer T y eliminar cada palabra que se halle en T y en S
+    bool isAnagram(string s, string t) {
+        HashTable<int, int, DivisionHash<int>> mapa(5,3,0.5);
+        
+        //Recorremos S
+        for (int i=0;i<s.length();i++){
+            if (mapa.search(s[i]) == nullptr){
+                mapa.insert(s[i],1);
+            }
+            else{   
+                (*mapa.search(s[i]))++;
+            }
+        }
+
+        //Recorremos T
+        for (int i=0;i<t.length();i++){
+            if (mapa.search(t[i]) == nullptr){
+                return false;
+            }
+            else{
+               (*mapa.search(s[i]))--; 
+            }
+        }
+
+        return true;
+    }
+};
+
 int main() {
-    cout << "=== HASH TABLE CON DIVISION HASH ===\n";
-    HashTable<int, string, DivisionHash<int>> ht1(5, 3, 0.5);
-
-    int keys[] = {2, 3, 6, 8, 10, 11, 15, 19, 20, 22, 25, 30};
-
-    for (int key : keys) {
-        ht1.insert(key, "valor_" + to_string(key));
-        cout << "Insertado: " << key
-             << " | capacity = " << ht1.getCapacity()
-             << " | fillFactor = " << ht1.getFillFactor() << "\n";
-    }
-
-    ht1.print();
-
-    if (auto p = ht1.search(19)) {
-        cout << "Encontrado 19 -> " << *p << "\n";
-    } else {
-        cout << "19 no encontrado\n";
-    }
-
-    ht1.remove(19);
-    cout << "Luego de eliminar 19:\n";
-    ht1.print();
-
-    cout << "\n=== HASH TABLE CON MULTIPLICATION HASH ===\n";
-    MultiplicationHash<int> mh(0.6180339887);
-    HashTable<int, string, MultiplicationHash<int>> ht2(5, 3, 0.5, mh);
-
-    for (int key : keys) {
-        ht2.insert(key, "v" + to_string(key));
-    }
-    ht2.print();
-
-    cout << "\n=== HASH TABLE CON UNIVERSAL HASH ===\n";
-    UniversalHash<int> uh(1000003);
-    HashTable<int, string, UniversalHash<int>> ht3(5, 3, 0.5, uh);
-
-    for (int key : keys) {
-        ht3.insert(key, "u" + to_string(key));
-    }
-    ht3.print();
-
-    cout << "Parámetros universal hash: "
-         << "a=" << uh.getA()
-         << ", b=" << uh.getB()
-         << ", p=" << uh.getP() << "\n";
-    return 0;
+    Solution xd;
+    int entrada=19;
+    cout<<xd.isHappy(entrada)<<std::endl;
 }

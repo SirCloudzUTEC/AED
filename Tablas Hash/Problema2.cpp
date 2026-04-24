@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <functional>
 #include <stdexcept>
@@ -6,6 +7,8 @@
 #include <utility>
 #include <cmath>
 
+#include <vector>
+#include <cassert>
 using namespace std;
 
 // ============================================================
@@ -380,55 +383,60 @@ public:
     }
 };
 
-// ============================================================
-// DEMO
-// ============================================================
-int main() {
-    cout << "=== HASH TABLE CON DIVISION HASH ===\n";
-    HashTable<int, string, DivisionHash<int>> ht1(5, 3, 0.5);
 
-    int keys[] = {2, 3, 6, 8, 10, 11, 15, 19, 20, 22, 25, 30};
 
-    for (int key : keys) {
-        ht1.insert(key, "valor_" + to_string(key));
-        cout << "Insertado: " << key
-             << " | capacity = " << ht1.getCapacity()
-             << " | fillFactor = " << ht1.getFillFactor() << "\n";
+class SolutionContainsDuplicate {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        HashTable<int, int, DivisionHash<int>> hashtable(5,3,0.5);
+        return false;
+    }
+};
+
+int main () {
+    SolutionContainsDuplicate s;
+
+    {
+        vector<int> nums = {1,2,3,1};
+        assert(s.containsDuplicate(nums) == true);
+    }
+    {
+        vector<int> nums = {1,2,3,4};
+        assert(s.containsDuplicate(nums) == false);
+    }
+    {
+        vector<int> nums = {1,1,1,3,3,4,3,2,4,2};
+        assert(s.containsDuplicate(nums) == true);
+    }
+    {
+        vector<int> nums = {};
+        assert(s.containsDuplicate(nums) == false);
+    }
+    {
+        vector<int> nums = {7};
+        assert(s.containsDuplicate(nums) == false);
+    }
+    {
+        vector<int> nums = {0,0};
+        assert(s.containsDuplicate(nums) == true);
+    }
+    {
+        vector<int> nums = {-1,-2,-3,-4};
+        assert(s.containsDuplicate(nums) == false);
+    }
+    {
+        vector<int> nums = {-1,-2,-3,-1};
+        assert(s.containsDuplicate(nums) == true);
+    }
+    {
+        vector<int> nums = {5,6,7,8,9,10};
+        assert(s.containsDuplicate(nums) == false);
+    }
+    {
+        vector<int> nums = {42,42,42};
+        assert(s.containsDuplicate(nums) == true);
     }
 
-    ht1.print();
-
-    if (auto p = ht1.search(19)) {
-        cout << "Encontrado 19 -> " << *p << "\n";
-    } else {
-        cout << "19 no encontrado\n";
-    }
-
-    ht1.remove(19);
-    cout << "Luego de eliminar 19:\n";
-    ht1.print();
-
-    cout << "\n=== HASH TABLE CON MULTIPLICATION HASH ===\n";
-    MultiplicationHash<int> mh(0.6180339887);
-    HashTable<int, string, MultiplicationHash<int>> ht2(5, 3, 0.5, mh);
-
-    for (int key : keys) {
-        ht2.insert(key, "v" + to_string(key));
-    }
-    ht2.print();
-
-    cout << "\n=== HASH TABLE CON UNIVERSAL HASH ===\n";
-    UniversalHash<int> uh(1000003);
-    HashTable<int, string, UniversalHash<int>> ht3(5, 3, 0.5, uh);
-
-    for (int key : keys) {
-        ht3.insert(key, "u" + to_string(key));
-    }
-    ht3.print();
-
-    cout << "Parámetros universal hash: "
-         << "a=" << uh.getA()
-         << ", b=" << uh.getB()
-         << ", p=" << uh.getP() << "\n";
+    cout << "Contains Duplicate: OK, TODOS LOS TEST PASARON!! \n";
     return 0;
 }

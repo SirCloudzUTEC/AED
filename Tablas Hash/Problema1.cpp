@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <functional>
 #include <stdexcept>
@@ -6,6 +7,8 @@
 #include <utility>
 #include <cmath>
 
+#include <vector>
+#include <cassert>
 using namespace std;
 
 // ============================================================
@@ -380,55 +383,96 @@ public:
     }
 };
 
-// ============================================================
-// DEMO
-// ============================================================
+
+
+
+class SolutionTwoSum {
+public:
+    // Solucion a alto nivel: 
+    // 1. Crear una Hash Table
+    // 2. Recorrer arreglo y buscar nuevos elementos y sus complementos
+    // 3. Insertar el indice del elemento actual y buscamos si su complemento
+    // esta en la HashTable
+
+    // vector<int> twoSum(vector<int> nums, int target){
+    //     vector<int> salida;
+    //     UniversalHash<int> uh(1000003);
+    //     HashTable<int, int, DivisionHash<int>> hashtable(1,3);
+
+    //     for (int i=0;i<nums.size();i++){
+    //         if (hashtable.contains(nums[i])){
+    //             if (hashtable.contains(target % nums[i] )){
+    //                 salida.push_back(i);
+    //             }
+    //         }
+    //         else{
+    //             hashtable.insert(1,nums[i]);
+    //         }
+    //     }
+
+    //     return salida;
+    // }
+ 
+    vector<int> twoSum(vector<int> nums, int target){
+        vector<int> salida;
+        UniversalHash<int> uh(1000003);
+        HashTable<int, int, DivisionHash<int>> hashtable(5,3,0.5);
+
+        for (int i=0;i<nums.size();i++){
+            int need = target - nums[i];
+            int* idx = hashtable.search(need);
+            if (idx != nullptr)
+                return {*idx,i};
+            hashtable.insert(nums[i],i);
+        }
+        return {};
+    }
+};
+
 int main() {
-    cout << "=== HASH TABLE CON DIVISION HASH ===\n";
-    HashTable<int, string, DivisionHash<int>> ht1(5, 3, 0.5);
+    SolutionTwoSum s;
 
-    int keys[] = {2, 3, 6, 8, 10, 11, 15, 19, 20, 22, 25, 30};
-
-    for (int key : keys) {
-        ht1.insert(key, "valor_" + to_string(key));
-        cout << "Insertado: " << key
-             << " | capacity = " << ht1.getCapacity()
-             << " | fillFactor = " << ht1.getFillFactor() << "\n";
+    {
+        vector<int> nums = {2,7,11,15};
+        assert((s.twoSum(nums, 9) == vector<int>{0,1}));
+    }
+    {
+        vector<int> nums = {3,2,4};
+        assert((s.twoSum(nums, 6) == vector<int>{1,2}));
+    }
+    {
+        vector<int> nums = {3,3};
+        assert((s.twoSum(nums, 6) == vector<int>{0,1}));
+    }
+    {
+        vector<int> nums = {1,5,3,7};
+        assert((s.twoSum(nums, 8) == vector<int>{1,2}));
+    }
+    {
+        vector<int> nums = {-1,-2,-3,-4,-5};
+        assert((s.twoSum(nums, -8) == vector<int>{2,4}));
+    }
+    {
+        vector<int> nums = {0,4,3,0};
+        assert((s.twoSum(nums, 0) == vector<int>{0,3}));
+    }
+    {
+        vector<int> nums = {1,2,3,4,5};
+        assert((s.twoSum(nums, 9) == vector<int>{3,4}));
+    }
+    {
+        vector<int> nums = {10,20,30,40};
+        assert((s.twoSum(nums, 50) == vector<int>{1,2}));
+    }
+    {
+        vector<int> nums = {8,1,6,2};
+        assert((s.twoSum(nums, 9) == vector<int>{0,1}));
+    }
+    {
+        vector<int> nums = {100,200,300,400,500};
+        assert((s.twoSum(nums, 700) == vector<int>{2,3}));
     }
 
-    ht1.print();
-
-    if (auto p = ht1.search(19)) {
-        cout << "Encontrado 19 -> " << *p << "\n";
-    } else {
-        cout << "19 no encontrado\n";
-    }
-
-    ht1.remove(19);
-    cout << "Luego de eliminar 19:\n";
-    ht1.print();
-
-    cout << "\n=== HASH TABLE CON MULTIPLICATION HASH ===\n";
-    MultiplicationHash<int> mh(0.6180339887);
-    HashTable<int, string, MultiplicationHash<int>> ht2(5, 3, 0.5, mh);
-
-    for (int key : keys) {
-        ht2.insert(key, "v" + to_string(key));
-    }
-    ht2.print();
-
-    cout << "\n=== HASH TABLE CON UNIVERSAL HASH ===\n";
-    UniversalHash<int> uh(1000003);
-    HashTable<int, string, UniversalHash<int>> ht3(5, 3, 0.5, uh);
-
-    for (int key : keys) {
-        ht3.insert(key, "u" + to_string(key));
-    }
-    ht3.print();
-
-    cout << "Parámetros universal hash: "
-         << "a=" << uh.getA()
-         << ", b=" << uh.getB()
-         << ", p=" << uh.getP() << "\n";
+    cout << "Two Sum: OK, TODOS LOS TEST PASARON!! \n";
     return 0;
 }
