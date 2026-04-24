@@ -445,8 +445,9 @@ public:
         return true;
     }
 
-    // La fija es devolver la longitud del sub array mas largo
-    int subarraySum(vector<int>& a, int k) {
+    // La fija es devolver la longitud del sub array mas largo. Todo eso siguiendo el patron del subarraySum
+    // Este codigo es usando el unordered map, el cual no esta permitido en labs
+    int subarraySum_noHacer(vector<int>& a, int k) {
         int n = a.size();
         unordered_map<int,int> mp;
         int cnt = 0;
@@ -462,6 +463,41 @@ public:
         }
         return cnt; 
     }
+    // Resuelto usando el Hash Entregado por el profe
+    int subarraySum_prof(vector<int>& a, int k) {
+        HashTable<int, int> mp;
+
+        int cnt = 0;
+        int s = 0;
+
+        mp.insert(0, 1);
+
+        for (int i = 0; i < a.size(); ++i) {
+            s += a[i];
+
+            int t = s - k;
+
+            int* freq = mp.search(t);
+            if (freq != nullptr) {
+                cnt += *freq;
+            }
+
+            int* current = mp.search(s);
+            if (current != nullptr) {
+                mp.insert(s, *current + 1);
+            } else {
+                mp.insert(s, 1);
+            }
+        }
+
+        return cnt;
+    }
+
+    int LongestSubArray(vector<int> &a, int k){
+        
+        return 0;
+    }
+
 
     // Fija para parcial
     // El array tiene 0 y 1. Hallar la longitud del subarray mas largo de 0 1.
