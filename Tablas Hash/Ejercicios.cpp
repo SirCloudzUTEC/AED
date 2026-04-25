@@ -465,39 +465,58 @@ public:
     }
     // Resuelto usando el Hash Entregado por el profe
     int subarraySum_prof(vector<int>& a, int k) {
-        HashTable<int, int> mp;
+        HashTable<int, int> diccionario;
+        int cont=0, sumatoria=0;
+        diccionario.insert(0,1); // Base inicializadora
 
-        int cnt = 0;
-        int s = 0;
+        for (int i = 0; i < a.size(); i++){
+            sumatoria += a[i];
+            int prev = sumatoria - k;
 
-        mp.insert(0, 1);
-
-        for (int i = 0; i < a.size(); ++i) {
-            s += a[i];
-
-            int t = s - k;
-
-            int* freq = mp.search(t);
-            if (freq != nullptr) {
-                cnt += *freq;
+            int* frecuencia = diccionario.search(prev); 
+            if(frecuencia != nullptr){
+                cont+=*frecuencia;
             }
 
-            int* current = mp.search(s);
-            if (current != nullptr) {
-                mp.insert(s, *current + 1);
-            } else {
-                mp.insert(s, 1);
+            int* current = diccionario.search(sumatoria);
+            if (current != nullptr){
+                diccionario.insert(sumatoria, *current + 1);
+            }   
+            else{
+                diccionario.insert(sumatoria,1);
             }
+        
         }
 
-        return cnt;
+        return cont;
     }
 
-    int LongestSubArray(vector<int> &a, int k){
-        
-        return 0;
-    }
+    int longestSubarraySumK(vector<int>& a, int k) {
+        HashTable<int,int> map;
+        int longest = 0, sumatoria = 0;
+        map.insert(0,-1);
 
+        for (int i = 0 ; i < a.size(); ++i){
+            sumatoria += a[i];
+
+            int current = sumatoria - k;
+
+            int* idx = map.search(current);
+            if (idx != nullptr){
+                int len = i - *idx;
+                if (len > longest ){
+                    longest = len;
+                }
+            }
+
+            if (map.search(sumatoria) == nullptr){
+                map.insert(sumatoria, i);
+            }
+
+        }
+
+        return longest;
+    }
 
     // Fija para parcial
     // El array tiene 0 y 1. Hallar la longitud del subarray mas largo de 0 1.
@@ -551,8 +570,30 @@ public:
     }
 };
 
+
+
 int main() {
-    Solution xd;
-    int entrada=19;
-    cout<<xd.isHappy(entrada)<<std::endl;
+
+    Solution s;
+    vector<int> a = {1, 2, 3, 2, 5};
+    int k = 5;
+    cout << s.longestSubarraySumK(a, k) << endl;
+
+    a = {1, -1, 5, -2, 3};
+    k = 3;
+    cout << s.longestSubarraySumK(a, k) << endl;
+
+    a = {-2, -1, 2, 1};
+    k = 1;
+    cout << s.longestSubarraySumK(a, k) << endl;
+
+    a = {3, 1, 0, 1, 8, 2, 3, 6};
+    k = 5;
+    cout << s.longestSubarraySumK(a, k) << endl;
+
+    a = {1, 2, 3};
+    k = 7;
+    cout << s.longestSubarraySumK(a, k) << endl;
+
+    return 0;
 }
